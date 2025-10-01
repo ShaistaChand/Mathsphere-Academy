@@ -1,33 +1,53 @@
-// Main router that combines all routes
-
 import express from 'express';
-import dotenv from 'dotenv'; // to access environment variables
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import dotenv from 'dotenv';
 
-// require('dotenv').config();
+// ES6 module equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
+// Load environment variables
+dotenv.config();
+
+// Import routes - FIXED: Use contactRoutes instead of api.js
+import contactRoutes from './routes/contactRoutes.js';
+
+// Create Express app
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-    res.send('Mathsphere backend server is ready!');
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from the frontend directory
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// API routes - FIXED: Use contactRoutes
+app.use('/api/contact', contactRoutes);
+
+// Route for the main page - FIXED: Remove individual page routes
+app.get('/*splat', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// routes
-
-app.get ('/api/v1/contacts', (req, res) => {
-    // res.send('Get all contacts');
-
-     // 1. Query database for contacts (e.g., MongoDB)
-  // 2. Send actual data as JSON
-  
-  const newQuery = [
-    { id: 1, name: "Alice", email: "alice@xyz.com", phone: "123-456-7890"},
-    { id: 2, name: "Bob", email: "bob@abc.com", phone: "098-765-4321"  }
-  ];
-    res.json(newQuery); // Sends JSON with auto 'Content-Type: application/json'
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    error: 'Something went wrong!'
+  });
 });
 
-dotenv.config({ path: './config/config.env' });
+// Start server
+app.listen(PORT, () => {
+  console.log(`MathSphere server running on port ${PORT}`);
+});
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {console.log(`Server started on port ${5000}`)});
+// Export app for testing
+export default app;
