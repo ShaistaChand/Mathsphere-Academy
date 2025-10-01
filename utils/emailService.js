@@ -17,11 +17,11 @@ export const sendContactNotification = async (contact) => {
       subject: `New Demo Request: ${contact.name}`,
       html: `
         <h3>New Demo Class Request</h3>
-        <p><strong>Name:</strong> ${contact.StudentName}</p>
-        <p><strong>Email:</strong> ${contact.EmailAddress}</p>
-        <p><strong>Phone:</strong> ${contact.PhoneNumber}</p>
-        <p><strong>Grade:</strong> ${contact.SelectGrade}</p>
-        <p><strong>Board:</strong> ${contact.SelectEducationBoard}</p>
+        <p><strong>Name:</strong> ${contact.name}</p>
+        <p><strong>Email:</strong> ${contact.email}</p>
+        <p><strong>Phone:</strong> ${contact.phone}</p>
+        <p><strong>Grade:</strong> ${contact.grade}</p>
+        <p><strong>Board:</strong> ${contact.board}</p>
         <p><strong>Date:</strong> ${new Date(contact.date).toLocaleString()}</p>
       `
     };
