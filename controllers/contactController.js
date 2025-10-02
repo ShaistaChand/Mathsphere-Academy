@@ -42,11 +42,13 @@ export const submitContact = async (req, res) => {
     contacts.push(newContact);
     
     // Send notification email to admin - UPDATED message
-    const adminEmailSent = await sendContactNotification(newContact);
-    // enable once email is setpup
+    // const adminEmailSent = await sendContactNotification(newContact);
+    // enable once email is setpup and disable the below line
+    const adminEmailSent = false;
     
     // Send confirmation email to user
-    const userEmailSent = await sendConfirmationEmail(email, name); // enable once email is setpup
+    // const userEmailSent = await sendConfirmationEmail(email, name); // enable once email is setpup and disable the below line
+    const userEmailSent = false;
 
     // Return success response
     res.status(201).json({
